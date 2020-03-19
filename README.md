@@ -1,104 +1,267 @@
-# Hapi Simple GOV.UK Question Page
+# Hapi GOV.UK Journey Flow
 
-The **hapi-govuk-question-page** module is a plugin for [Hapi](https://hapi.dev/) that provides a configuration-driven
-approach to implementing simple pages using the [GOV.UK Design System](https://design-system.service.gov.uk/).
+- [Overview](#overview)
+- [Installation](#installation)
+- [Usage](#usage)
+    - [Registering](#registering)
+    - [Mapping](#mapping)
+    - [File structure](#file-structure)
+    - [Branching](#branching)
 
-It is based on the original work for the [digital-form-builder](https://github.com/DEFRA/digital-form-builder).
+## Overview
+This plugin makes it easier to visualise, create and maintain journeys through a hapi web service.
 
-The [API documentation](API.md) contains details of how to configure the plugin.
+It achieves this by placing reusable journeys into modules each containing a set of pages or
+routes that when combined make a self contained reusable journey.
 
-## Purpose
+Examples of such modules would be an address module, a contact module and a file upload module.
 
-We have a wide range of services, many involving quite lengthy and complex interactions with our users.
-As we break these interactions down into simple steps to make them as easy as possible to use,
-we often end up with a service journey that includes a large number of quite simple
-[question pages](https://design-system.service.gov.uk/patterns/question-pages).
+A way of configuring the journey within the module and connections between modules is with mapping files.
+Within the POC, [YAML](https://yaml.org/start.html) was used to describe the journey configuration within
+each mapping file.
 
-This plugin is designed to help create those simple pages, by providing these two features:
-  - A way to implement pages by just listing the components that need to appear on them and providing a minimal
-    amount of configuration information.
-  - A basic request handler that just deals with processing the page requests and validating the inputs.
+## Installation
+Via github:
+```
+npm install --save https://github.com/DEFRA/hapi-govuk-journey-map.git#master
+```
 
-Those features are already met by a combination of Nunjucks, the GOV.UK Design System and the Hapi request lifecycle,
-but using them out of the box results in a lot of repeated, boilerplate code and templates.
+It is recommended that tie to a specific commit/version as follows:
+```
+npm install --save https://github.com/DEFRA/hapi-govuk-journey-map.git#commit_or_version
+```
 
-The purpose of this plugin is to put all of that boilerplate into one place where it can be tested once and reused
-multiple times.
+## Usage
+The best way to describe this is with an example:
 
-## GOV.UK Design System components and patterns
+### Registering
+Please note that the required "setQueryData" and "getQueryData" functions will be explained in [Branching](#branching).
 
-The plugin provides an implementation of the Question Page pattern and *most* of the components and patterns from
-the Design System. Those not included are:
- - Components such as the Back Link or Error Summary that are built into the page and do not need to be added
-   separately.
- - The Accordian and Tabs components, as these are not *simple* question pages and would make the configuration
-   probably more complex than the equivalent code.
- - Components and patterns such as the Panel, the Summary List, Confirmation Pages and Task List Pages that are not
-   required for a Question Page.
- - Patterns such as National Insurance Numbers that we haven't found a need for yet.
- - Patterns such as Addresses and Confirm an Email Address that require more complex interaction design and
-   functionality than a simple question page.
+Register the plugin as follows:
+```js
+const cache = {}
 
-## Prerequisites
+const { resolve } = require('path')
 
-This plugin is for use inside a Hapi GOV.UK application.  To use it, you will need to create an application
-based on the following:
-- [Node.js](https://nodejs.org)
-- [Hapi](https://hapi.dev/)
-- The Hapi [Vision](https://github.com/hapijs/vision) plugin, configured to use:
-  - [Nunjucks](https://mozilla.github.io/nunjucks/)
-  - The [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend)
+module.exports = {
+  plugin: require('hapi-govuk-journey-map'),
+  options: {
+    modulePath: resolve(`${process.cwd()}/src/server/modules`),
+    setQueryData: (request, data) => {
+      Object.assign(cache, data)
+    },
+    getQueryData: (request) => {
+      return { ...cache }
+    }
+  }
+}
+```
 
-Specific versions of these dependencies are identified in the package.json.
+### Mapping
+Please note that each of the entries within the following files ultimately generate routes within a hapi service.
 
-## Setup
+Example mapping files for a simple journey:
+- Root map:
+```yaml
+--- # Root map 
 
-To use this plugin in your application, simply
+home:
+  path: "/"
+  route: home.route
+  next: applicant
 
-> `npm install @envage/hapi-govuk-question-page`
+applicant:
+  path: "/applicant"
+  module: contact
+  next: complete
 
-Register the plugin with your Hapi server, as with any other plugin
+complete:
+  path: "/complete"
+  route: complete.route
+```
+- Contact map:
+```yaml
+--- # Contact map
 
-> `await server.register(require('@envage/hapi-govuk-question-page'))`
+name:
+  path: "/name"
+  route: contact-name.route
+  next: address
 
-This adds a custom `hapi-govuk-question-page` handler to your server that you can use in your routes
+address:
+  path: "/address"
+  module: address
+  next: email
 
-> ```js
->  server.route({
->    method: ['GET', 'POST'],
->    path: '/',
->    handler: {
->      'hapi-govuk-question-page': {
->        pageDefinition,
->        getData,
->        setData,
->        getNextPath,
->      }
->    }
->  })
-> ```
+email:
+  path: "/email"
+  route: contact-email.route
+  next: return
+``` 
+- Address map:
+```yaml
+--- # Address map
 
-For pages to be correctly served, you will also have to perform setup of Vision, Nunjucks and the GOV.UK Frontend.
-Details on this are in the [API documentation](API.md).
+search:
+  path: "/search"
+  route: address-search.route
+  next: select
+  
+select:
+  path: "/select"
+  route: address-select.route
+  next: entry
+
+entry:
+  path: "/entry"
+  route: address-entry.route
+  next: return
+```
+
+The idea is that the navigation through the routes (pages) starts in the root map and flows
+between the routes via the next property.  When the module property is set, the flow moves
+to the start of that modules map and flows through that map.  When a next property within that map is set
+to return, the flow returns to the previous map and continues.
+
+As I have included no [branching](#branching) in the above map, I would expect the paths (pages) to be traversed in the following order:
+```text
+- /
+- /applicant/name
+- /applicant/address/search
+- /applicant/address/select
+- /applicant/address/entry
+- /applicant/email
+- /complete
+```
+Note that the paths are generated with the parent module path prefixing the current path in each module's map
+
+### File structure
+The file structure in the project for these modules would be as follows:
+```text
+.
++-- modules
+|   +-- complete.route.js
+|   +-- home.route.js
+|   +-- map.yml
+|   +-- address
+|   |   +--address.map.yaml
+|   |   +--address-entry.view.njk
+|   |   +--address-entry.route.js
+|   |   +--address-search.view.njk
+|   |   +--address-search.route.js
+|   |   +--address-select.view.njk
+|   |   +--address-select.route.js
+|   +-- contact
+|   |   +--contact.map.yaml
+|   |   +--contact-email.view.njk
+|   |   +--contact-email.route.js
+|   |   +--contact-name.view.njk
+|   |   +--contact-name.route.js
+
+```
+
+The following is an example of a route file.  I have chosen "contact-name.route.js" for this purpose.
+Please note that in the following example "Application" is used to persist the contact name:
+
+```js
+const Application = require('../../dao/application')
+const view = 'contact/contact-name.view.njk'
+const pageHeading = 'Please enter your name'
+
+module.exports = [{
+  method: 'GET',
+  handler: async function (request, h) {
+    const { contact = {} } = await Application.get(request)
+    return h.view(view, {
+      pageHeading,
+      value: contact.name
+    })
+  }
+}, {
+  method: 'POST',
+  handler: async function (request, h) {
+    const { contact = {} } = await Application.get(request)
+    const { name = '' }  = request.payload
+    contact.name = name
+    await Application.update(request, { contact })
+    return h.continue
+  }
+}]
+```
+
+###Branching
+In order to allow branching, it's necessary to allow a query to be asked
+with a set of alternative routes to go to based on the result of that query.
+
+```yaml
+--- # Address map
+
+manual-check:
+  path: "/manual-check"
+  route: address-manual-check
+  next:
+    query: postcodeLookUpEnabled
+    when:
+      yes: search
+      no: entry
+
+search:
+  path: "/search"
+  route: address-search.route
+  next: select
+  
+select:
+  path: "/select"
+  route: address-select.route
+  next: entry
+
+entry:
+  path: "/entry"
+  route: address-entry.route
+  next: return
+```
+In the above map, the value of "postcodeLookUpEnabled" (please notes that you can call this 
+query whatever you like) is used to determine the branching.
+
+In the above case a value of "yes" would branch to "search" where as "no" would skip both
+"search" and "select" and jump straight to "entry"
+
+In order to make this work the "postcodeLookUpEnabled" value needs to be set to "yes" or "no" within the route file.
+This can be done using the "setQueryData" method.
+
+Please see the extract of a route file below as an example:
+
+```js
+.
+.
+const { setQueryData } = require('hapi-govuk-journey-flow')
+.
+.
+}, {
+  method: 'POST',
+  handler: async function (request, h) {
+    if (process.env.POSTCODE_LOOKUP_ENABLED) {
+      setQueryData(request, { postcodeLookUPEnabled: 'yes'})    
+    } else {
+      setQueryData(request, { postcodeLookUPEnabled: 'no'})    
+    } 
+    return h.continue
+  }
+}
+.
+.
+.
+```
 
 ### Development and Test
 
 When developing this plugin, simply clone this repository
 
-> `git clone https://github.com/DEFRA/hapi-govuk-question-page.git`
+> `git clone https://github.com/DEFRA/hapi-govuk-journey-map.git`
 
 and run
 
 > `npm install`
-
-## Running in development
-
-The project includes a test harness that shows the different form components on a single page.
-This can be run using
-
-> `npm run test-harness`
-
-and then navigating in your browser to http://localhost:3000
 
 ## Running tests
 
