@@ -1,0 +1,33 @@
+{
+  "name": "hapi-govuk-journey-map",
+  "version": "0.0.1",
+  "description": "A hapi plugin for mapping journeys through a hapi web service",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard",
+    "unit-test": "lab",
+    "test": "npm run unit-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DEFRA/hapi-govuk-journey-map"
+  },
+  "author": "Department for Environment, Food and Rural Affairs <https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs>.",
+  "license": "SEE LICENSE IN LICENSE",
+  "engines": {
+    "node": "^12.0.0"
+  },
+  "dependencies": {
+    "@hapi/boom": "^9.1.0",
+    "@hapi/hapi": "^19.1.1",
+    "@hapi/hoek": "^9.0.3",
+    "@hapi/joi": "^17.1.0",
+    "defra-logging-facade": "git+https://github.com/DEFRA/defra-logging-facade.git#master",
+    "js-yaml": "^3.13.1"
+  },
+  "devDependencies": {
+    "@hapi/code": "^8.0.1",
+    "@hapi/lab": "^22.0.3",
+    "standard": "^14.3.0"
+  }
+}
