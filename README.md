@@ -189,7 +189,7 @@ module.exports = [{
 }]
 ```
 
-###Branching
+### Branching
 In order to allow branching, it's necessary to allow a query to be asked
 with a set of alternative routes to go to based on the result of that query.
 
