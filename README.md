@@ -133,7 +133,9 @@ As I have included no [branching](#branching) in the above map, I would expect t
 - /applicant/email
 - /complete
 ```
-Note that the paths are generated with the parent module path prefixing the current path in each module's map
+Note that the paths are generated with the parent module path prefixing the current path in each module's map.
+
+The routemap object can be retrieved with the `getRouteMap` function.
 
 ### File structure
 The file structure in the project for these modules would be as follows:
