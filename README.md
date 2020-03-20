@@ -234,7 +234,7 @@ Please see the extract of a route file below as an example:
 ```js
 .
 .
-const { setQueryData } = require('hapi-govuk-journey-flow')
+const { setQueryData } = require('hapi-govuk-journey-map')
 .
 .
 }, {
