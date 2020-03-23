@@ -1,0 +1,7 @@
+home:
+  path: /
+  route: home.route
+
+complete:
+  path: /complete
+  route: complete.route

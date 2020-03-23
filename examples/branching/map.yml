@@ -1,0 +1,19 @@
+home:
+  path: /
+  route: home.route
+
+question-1:
+  path: /question-1
+  route: question-1.route
+  next:
+    query: answer
+    when:
+      yes: complete
+
+question-2:
+  path: /question-2
+  route: question-2.route
+
+complete:
+  path: /complete
+  route: complete.route

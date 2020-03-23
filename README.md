@@ -1,5 +1,10 @@
 # Hapi GOV.UK Journey Flow
 
+[![Build Status](https://travis-ci.com/DEFRA/hapi-govuk-journey-map.svg?branch=master)](https://travis-ci.com/DEFRA/hapi-govuk-journey-map)
+[![Known Vulnerabilities](https://snyk.io/test/github/defra/hapi-govuk-journey-map/badge.svg)](https://snyk.io/test/github/defra/hapi-govuk-journey-map)
+[![Code Climate](https://codeclimate.com/github/DEFRA/hapi-govuk-journey-map/badges/gpa.svg)](https://codeclimate.com/github/DEFRA/hapi-govuk-journey-map)
+[![Test Coverage](https://codeclimate.com/github/DEFRA/hapi-govuk-journey-map/badges/coverage.svg)](https://codeclimate.com/github/DEFRA/hapi-govuk-journey-map/coverage)
+
 - [Overview](#overview)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -68,12 +73,10 @@ Example mapping files for a simple journey:
 home:
   path: "/"
   route: home.route
-  next: applicant
 
 applicant:
   path: "/applicant"
   module: contact
-  next: complete
 
 complete:
   path: "/complete"
@@ -86,17 +89,14 @@ complete:
 name:
   path: "/name"
   route: contact-name.route
-  next: address
 
 address:
   path: "/address"
   module: address
-  next: email
 
 email:
   path: "/email"
   route: contact-email.route
-  next: return
 ``` 
 - Address map:
 ```yaml
@@ -105,23 +105,18 @@ email:
 search:
   path: "/search"
   route: address-search.route
-  next: select
   
 select:
   path: "/select"
   route: address-select.route
-  next: entry
 
 entry:
   path: "/entry"
   route: address-entry.route
-  next: return
 ```
 
-The idea is that the navigation through the routes (pages) starts in the root map and flows
-between the routes via the next property.  When the module property is set, the flow moves
-to the start of that modules map and flows through that map.  When a next property within that map is set
-to return, the flow returns to the previous map and continues.
+The idea is that the navigation through the routes (pages) starts in the root map and flows through each adjacent route.  When the module property is set, the flow moves
+to the start of that modules map and flows through that map.  After processing the last route, the flow returns to the previous map and continues.
 
 As I have included no [branching](#branching) in the above map, I would expect the paths (pages) to be traversed in the following order:
 ```text
@@ -210,17 +205,14 @@ manual-check:
 search:
   path: "/search"
   route: address-search.route
-  next: select
   
 select:
   path: "/select"
   route: address-select.route
-  next: entry
 
 entry:
   path: "/entry"
   route: address-entry.route
-  next: return
 ```
 In the above map, the value of "postcodeLookUpEnabled" (please notes that you can call this 
 query whatever you like) is used to determine the branching.
