@@ -6,3 +6,5 @@ node_modules
 npm-debug.log
 server/public/build
 coverage
+/coverage.html
+/lcov.info
