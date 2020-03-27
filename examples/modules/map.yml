@@ -1,0 +1,13 @@
+home:
+  path: /
+  route: home.route
+
+quiz:
+  path: /quiz
+  module: questions
+  options:
+    title: Super quiz
+
+complete:
+  path: /complete
+  route: complete.route

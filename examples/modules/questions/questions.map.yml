@@ -1,0 +1,14 @@
+
+question-1:
+  path: /question-1
+  route: question-1.route
+
+question-2:
+  path: /question-2
+  route: question-2.route
+
+question-3:
+  path: /question-3
+  module: bonus
+  options:
+    title: 'Question 3 is a bonus round'
