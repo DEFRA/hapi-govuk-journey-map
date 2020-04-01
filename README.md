@@ -1,4 +1,4 @@
-# Hapi GOV.UK Journey Flow
+# Hapi GOV.UK Journey Map
 
 [![Build Status](https://travis-ci.com/DEFRA/hapi-govuk-journey-map.svg?branch=master)](https://travis-ci.com/DEFRA/hapi-govuk-journey-map)
 [![Known Vulnerabilities](https://snyk.io/test/github/defra/hapi-govuk-journey-map/badge.svg)](https://snyk.io/test/github/defra/hapi-govuk-journey-map)
