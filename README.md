@@ -57,7 +57,8 @@ module.exports = {
     },
     getQueryData: (request) => {
       return { ...cache }
-    }
+    },
+    journyMapPath: '/journey-map'
   }
 }
 ```
@@ -246,6 +247,16 @@ const { setQueryData } = require('hapi-govuk-journey-map')
 .
 .
 ```
+
+### Enquiry routes
+
+The enquiry routes will be available if the journeyMapPath option is configured
+In the following example the journeyMapPath is set to '/journey-map'
+```
+/journey-map
+/journey-map/{id}
+```
+These routes will be automatically loaded when the plugin is registered to return json describing the internal generated map
 
 ### Development and Test
 
