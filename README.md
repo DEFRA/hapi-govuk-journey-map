@@ -58,7 +58,8 @@ module.exports = {
     getQueryData: (request) => {
       return { ...cache }
     },
-    journyMapPath: '/journey-map'
+    journyMapPath: '/journey-map',
+    journyMapView: '/journey-map.njk'
   }
 }
 ```
@@ -257,6 +258,8 @@ In the following example the journeyMapPath is set to '/journey-map'
 /journey-map/{id}
 ```
 These routes will be automatically loaded when the plugin is registered to return json describing the internal generated map
+
+If the JourneyMapView parameter is set, the view will be displayed with the dat in the variable map otherwise json is returned.
 
 ### Development and Test
 
