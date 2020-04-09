@@ -291,10 +291,9 @@ const { getNextRoute } = require('hapi-govuk-journey-map')
 const nextRoute = getNextRoute(request)
 ```
 
-
 ### Module options
 
-When reusing a module it is desirable to be able to pass options to it. For example, a file upload screen could have be a filetype string and a list of allowed file extensions passed to it, allowing it to be reused for different types of file. These options are passed in the following way:
+When reusing a module it is desirable to be able to pass options to it. For example, a file upload screen could have a filetype string and a list of allowed file extensions passed to it, allowing it to be reused for different types of file. These options are passed in the following way:
 
 ```yaml
 site-plan-upload:
