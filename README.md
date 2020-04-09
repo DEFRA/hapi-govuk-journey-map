@@ -58,8 +58,8 @@ module.exports = {
     getQueryData: (request) => {
       return { ...cache }
     },
-    journyMapPath: '/journey-map',
-    journyMapView: '/journey-map.njk'
+    journeyMapPath: '/journey-map',
+    journeyMapView: '/journey-map.njk'
   }
 }
 ```
@@ -143,7 +143,7 @@ The file structure in the project for these modules would be as follows:
 |   +-- home.route.js
 |   +-- map.yml
 |   +-- address
-|   |   +--address.map.yaml
+|   |   +--address.map.yml
 |   |   +--address-entry.view.njk
 |   |   +--address-entry.route.js
 |   |   +--address-search.view.njk
@@ -151,7 +151,7 @@ The file structure in the project for these modules would be as follows:
 |   |   +--address-select.view.njk
 |   |   +--address-select.route.js
 |   +-- contact
-|   |   +--contact.map.yaml
+|   |   +--contact.map.yml
 |   |   +--contact-email.view.njk
 |   |   +--contact-email.route.js
 |   |   +--contact-name.view.njk
@@ -260,6 +260,60 @@ In the following example the journeyMapPath is set to '/journey-map'
 These routes will be automatically loaded when the plugin is registered to return json describing the internal generated map
 
 If the JourneyMapView parameter is set, the view will be displayed with the dat in the variable map otherwise json is returned.
+
+### Getting route details
+
+When writing a route handler you may want to retrieve route details. The following functions can be used for this:
+
+`getRoute` retrieves details about a named route:
+```js
+const { getRoute } = require('hapi-govuk-journey-map')
+.
+.
+const route = await getRoute('route-id')
+```
+
+`getCurrent` retrieves details about the current route:
+
+```js
+const { getCurrent } = require('hapi-govuk-journey-map')
+.
+.
+const route = await getCurrent(request)
+```
+
+`getNextRoute` retrives the route that is next in the flow:
+
+```js
+const { getNextRoute } = require('hapi-govuk-journey-map')
+.
+.
+const nextRoute = getNextRoute(request)
+```
+
+
+### Module options
+
+When reusing a module it is desirable to be able to pass options to it. For example, a file upload screen could have be a filetype string and a list of allowed file extensions passed to it, allowing it to be reused for different types of file. These options are passed in the following way:
+
+```yaml
+site-plan-upload:
+  path: "/site-plan-upload"
+  module: "upload"
+  options:
+    filetype: "Site plan"
+    extensions: ["PNG", "PDF"]
+```
+
+These can then be accessed from a route handler within the module like this:
+
+```js
+const { getCurrent } = require('hapi-govuk-journey-map')
+.
+.
+const route = await getCurrent(request)
+const { filetype, extensions } = route.parent.options
+```
 
 ### Development and Test
 
