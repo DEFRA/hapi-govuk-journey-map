@@ -1,6 +1,6 @@
 {
-  "name": "hapi-govuk-journey-map",
-  "version": "0.0.1",
+  "name": "@envage/hapi-govuk-journey-map",
+  "version": "0.1.0",
   "description": "A hapi plugin for mapping journeys through a hapi web service",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "@hapi/hapi": "^19.1.1",
     "@hapi/hoek": "^9.0.3",
     "@hapi/joi": "^17.1.0",
-    "defra-logging-facade": "git+https://github.com/DEFRA/defra-logging-facade.git#master",
+    "defra-logging-facade": "github:DEFRA/defra-logging-facade",
     "js-yaml": "^3.13.1"
   },
   "devDependencies": {
@@ -31,5 +31,12 @@
     "codeclimate-test-reporter": "^0.5.1",
     "sinon": "^9.0.1",
     "standard": "^14.3.0"
-  }
+  },
+  "peerDependencies": {
+    "@hapi/hapi": "19.x"
+  },
+  "files": [
+    "index.js",
+    "lib/journey-map.js"
+  ]
 }
