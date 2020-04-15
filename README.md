@@ -26,9 +26,8 @@ Within the POC, [YAML](https://yaml.org/start.html) was used to describe the jou
 each mapping file.
 
 ## Installation
-Via github:
 ```
-npm install --save @envag/hapi-govuk-journey-map
+npm install --save @envage/hapi-govuk-journey-map
 ```
 
 ## Usage
@@ -44,7 +43,7 @@ const cache = {}
 const { resolve } = require('path')
 
 module.exports = {
-  plugin: require('@envag/hapi-govuk-journey-map'),
+  plugin: require('@envage/hapi-govuk-journey-map'),
   options: {
     modulePath: resolve(`${process.cwd()}/src/server/modules`),
     setQueryData: (request, data) => {
@@ -225,7 +224,7 @@ Please see the extract of a route file below as an example:
 ```js
 .
 .
-const { setQueryData } = require('@envag/hapi-govuk-journey-map')
+const { setQueryData } = require('@envage/hapi-govuk-journey-map')
 .
 .
 }, {
@@ -262,7 +261,7 @@ When writing a route handler you may want to retrieve route details. The followi
 
 `getRoute` retrieves details about a named route:
 ```js
-const { getRoute } = require('@envag/hapi-govuk-journey-map')
+const { getRoute } = require('@envage/hapi-govuk-journey-map')
 .
 .
 const route = await getRoute('route-id')
@@ -271,7 +270,7 @@ const route = await getRoute('route-id')
 `getCurrent` retrieves details about the current route:
 
 ```js
-const { getCurrent } = require('@envag/hapi-govuk-journey-map')
+const { getCurrent } = require('@envage/hapi-govuk-journey-map')
 .
 .
 const route = await getCurrent(request)
@@ -280,7 +279,7 @@ const route = await getCurrent(request)
 `getNextRoute` retrives the route that is next in the flow:
 
 ```js
-const { getNextRoute } = require('@envag/hapi-govuk-journey-map')
+const { getNextRoute } = require('@envage/hapi-govuk-journey-map')
 .
 .
 const nextRoute = getNextRoute(request)
@@ -302,7 +301,7 @@ site-plan-upload:
 These can then be accessed from a route handler within the module like this:
 
 ```js
-const { getCurrent } = require('@envag/hapi-govuk-journey-map')
+const { getCurrent } = require('@envage/hapi-govuk-journey-map')
 .
 .
 const route = await getCurrent(request)

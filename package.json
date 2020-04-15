@@ -1,5 +1,5 @@
 {
-  "name": "@envag/hapi-govuk-journey-map",
+  "name": "@envage/hapi-govuk-journey-map",
   "version": "0.1.0",
   "description": "A hapi plugin for mapping journeys through a hapi web service",
   "main": "index.js",
