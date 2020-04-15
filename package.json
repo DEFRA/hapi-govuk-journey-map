@@ -31,5 +31,12 @@
     "codeclimate-test-reporter": "^0.5.1",
     "sinon": "^9.0.1",
     "standard": "^14.3.0"
-  }
+  },
+  "peerDependencies": {
+    "@hapi/hapi": "19.x"
+  },
+  "files": [
+    "index.js",
+    "lib/journey-map.js"
+  ]
 }
