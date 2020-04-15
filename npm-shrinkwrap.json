@@ -1,6 +1,6 @@
 {
-  "name": "hapi-govuk-journey-map",
-  "version": "0.0.1",
+  "name": "@envag/hapi-govuk-journey-map",
+  "version": "0.1.0",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
@@ -1019,8 +1019,8 @@
       }
     },
     "defra-logging-facade": {
-      "version": "git+https://github.com/DEFRA/defra-logging-facade.git#bb51e5bcbc70a7bc8ffbbc6d14820a2b5ca71f94",
-      "from": "git+https://github.com/DEFRA/defra-logging-facade.git#master",
+      "version": "github:DEFRA/defra-logging-facade#bb51e5bcbc70a7bc8ffbbc6d14820a2b5ca71f94",
+      "from": "github:DEFRA/defra-logging-facade",
       "requires": {
         "airbrake-js": "~1.4.9",
         "lodash.clonedeep": "~4.5.0",
