@@ -1,6 +1,6 @@
 {
   "name": "@envage/hapi-govuk-journey-map",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A hapi plugin for mapping journeys through a hapi web service",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,7 @@
     "@hapi/code": "^8.0.1",
     "@hapi/lab": "^22.0.3",
     "codeclimate-test-reporter": "^0.5.1",
-    "sinon": "^9.0.1",
+    "sinon": "^9.0.2",
     "standard": "^14.3.0"
   },
   "peerDependencies": {
